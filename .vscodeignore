@@ -1,0 +1,21 @@
+# Repo-only files
+.gitignore
+.vscodeignore
+.vscode/**
+.DS_Store
+**/.DS_Store
+*.vsix
+test-db.md
+scripts/**
+
+# Not needed at runtime in dependencies
+node_modules/**/*.map
+node_modules/**/*.ts
+node_modules/**/*.cts
+node_modules/**/*.mts
+node_modules/**/*.md
+node_modules/**/doc/**
+node_modules/**/docs/**
+node_modules/**/test/**
+node_modules/**/tests/**
+node_modules/**/.github/**

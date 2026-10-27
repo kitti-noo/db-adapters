@@ -1,0 +1,247 @@
+{
+  "name": "db-adapters",
+  "displayName": "db-adapters",
+  "description": "Browse and query PostgreSQL, MySQL / MariaDB, Oracle, MongoDB and SQL Server from the VS Code sidebar.",
+  "version": "0.0.7",
+  "publisher": "local",
+  "license": "UNLICENSED",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "main": "./extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "dbViewer",
+          "title": "db-adapters",
+          "icon": "media/db-adapters.svg"
+        }
+      ],
+      "panel": [
+        {
+          "id": "dbViewerPanel",
+          "title": "db-adapters",
+          "icon": "media/db-adapters.svg"
+        }
+      ]
+    },
+    "views": {
+      "dbViewer": [
+        {
+          "id": "dbViewer.connections",
+          "name": "Connections"
+        }
+      ],
+      "dbViewerPanel": [
+        {
+          "type": "webview",
+          "id": "dbViewer.queryResults",
+          "name": "Query Results"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "dbViewer.connections",
+        "contents": "No connections yet.\n[Add Connection](command:dbViewer.addConnection)"
+      }
+    ],
+    "commands": [
+      {
+        "command": "dbViewer.addConnection",
+        "title": "Add Connection",
+        "category": "db-adapters",
+        "icon": "$(add)"
+      },
+      {
+        "command": "dbViewer.editConnection",
+        "title": "Edit Connection",
+        "category": "db-adapters",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "dbViewer.removeConnection",
+        "title": "Remove Connection",
+        "category": "db-adapters",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "dbViewer.disconnect",
+        "title": "Disconnect",
+        "category": "db-adapters",
+        "icon": "$(debug-disconnect)"
+      },
+      {
+        "command": "dbViewer.refresh",
+        "title": "Refresh",
+        "category": "db-adapters",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "dbViewer.openTable",
+        "title": "Open Table",
+        "category": "db-adapters",
+        "icon": "$(table)"
+      },
+      {
+        "command": "dbViewer.newQuery",
+        "title": "New Query",
+        "category": "db-adapters",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "dbViewer.runQuery",
+        "title": "Run Query",
+        "category": "db-adapters",
+        "icon": "$(play)"
+      },
+      {
+        "command": "dbViewer.exportQuery",
+        "title": "Export Query to CSV",
+        "category": "db-adapters",
+        "icon": "$(export)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "dbViewer.addConnection",
+          "when": "view == dbViewer.connections",
+          "group": "navigation@1"
+        },
+        {
+          "command": "dbViewer.refresh",
+          "when": "view == dbViewer.connections",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "dbViewer.newQuery",
+          "when": "view == dbViewer.connections && viewItem =~ /^connection/",
+          "group": "inline@1"
+        },
+        {
+          "command": "dbViewer.refresh",
+          "when": "view == dbViewer.connections && viewItem =~ /^(connection|schema)/",
+          "group": "inline@2"
+        },
+        {
+          "command": "dbViewer.newQuery",
+          "when": "view == dbViewer.connections && viewItem =~ /^connection/",
+          "group": "1_query@1"
+        },
+        {
+          "command": "dbViewer.editConnection",
+          "when": "view == dbViewer.connections && viewItem =~ /^connection/",
+          "group": "2_manage@1"
+        },
+        {
+          "command": "dbViewer.disconnect",
+          "when": "view == dbViewer.connections && viewItem == connection-connected",
+          "group": "2_manage@2"
+        },
+        {
+          "command": "dbViewer.removeConnection",
+          "when": "view == dbViewer.connections && viewItem =~ /^connection/",
+          "group": "2_manage@3"
+        },
+        {
+          "command": "dbViewer.openTable",
+          "when": "view == dbViewer.connections && viewItem == table",
+          "group": "inline@1"
+        },
+        {
+          "command": "dbViewer.openTable",
+          "when": "view == dbViewer.connections && viewItem == table",
+          "group": "1_query@1"
+        },
+        {
+          "command": "dbViewer.newQuery",
+          "when": "view == dbViewer.connections && viewItem =~ /^(schema|table)$/",
+          "group": "1_query@2"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "dbViewer.runQuery",
+          "when": "dbViewer.isQueryEditor",
+          "group": "navigation@1"
+        },
+        {
+          "command": "dbViewer.exportQuery",
+          "when": "dbViewer.isQueryEditor",
+          "group": "navigation@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "dbViewer.editConnection",
+          "when": "false"
+        },
+        {
+          "command": "dbViewer.removeConnection",
+          "when": "false"
+        },
+        {
+          "command": "dbViewer.disconnect",
+          "when": "false"
+        },
+        {
+          "command": "dbViewer.openTable",
+          "when": "false"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "dbViewer.runQuery",
+        "key": "ctrl+enter",
+        "mac": "cmd+enter",
+        "when": "editorTextFocus && dbViewer.isQueryEditor"
+      }
+    ],
+    "configuration": {
+      "title": "db-adapters",
+      "properties": {
+        "dbViewer.readOnly": {
+          "type": "boolean",
+          "default": true,
+          "description": "Block statements that modify data or schema (INSERT, UPDATE, DELETE, DROP, $out, $merge, ...). A connection can override this in Edit Connection."
+        },
+        "dbViewer.confirmWrites": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ask for confirmation before running a statement that modifies data or schema."
+        },
+        "dbViewer.pageSize": {
+          "type": "number",
+          "default": 100,
+          "description": "Rows per page when opening a table or collection."
+        },
+        "dbViewer.maxRows": {
+          "type": "number",
+          "default": 1000,
+          "description": "Maximum rows shown for a query result."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "package": "node scripts/package.js",
+    "package:same": "vsce package --allow-missing-repository",
+    "install-ext": "code --install-extension db-adapters-$npm_package_version.vsix"
+  },
+  "dependencies": {
+    "mongodb": "^7.0.0",
+    "mssql": "^12.0.0",
+    "mysql2": "^3.24.5",
+    "oracledb": "^7.0.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^4.0.0"
+  }
+}

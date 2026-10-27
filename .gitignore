@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Packaged extension
+*.vsix
+
+# VS Code test runs
+.vscode-test/
+
+# Logs
+npm-debug.log*
+*.log
+test-db.md
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
